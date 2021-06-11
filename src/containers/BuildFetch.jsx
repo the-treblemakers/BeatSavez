@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { fetchSongs } from '../services/fetchSongs';
+import { fetchSongs, postSongs } from '../services/fetchSongs';
 
 export default function BuildFetch() {
     const [orderBy, setOrderBy] = useState('viewCount');
@@ -10,9 +10,14 @@ export default function BuildFetch() {
     const [resultsMessage, setResultsMessage] = useState('');
     // const [beforeDate, setBeforeDate] = useState('');
 
-    // saveToDB(); write mass post to database function for handling array directly(map and insert may be simplest, set and forget)
+    // get database URL for deployed BeatWavez-BE
+    const saveToSongbook = () => {
+        const databaseReturn = postSongs(channelArray, databaseEndpoint);
+        setResultsMessage(`Posted ${databaseReturn.length} videos for Channel ID: ${channelId} to database.`);
+    };
+
     const saveToFile = () => {
-        setResultsMessage(`Done getting videos for Channel ID: ${channelId}. You fetched ${channelArray.length} videos. You can save to file and/or post to songs database now.`);
+        setResultsMessage(`Done getting videos for Channel ID: ${channelId}. You fetched ${channelArray.length} videos. You can save to file now.`);
 
         let file;
         const data = JSON.stringify(channelArray);
@@ -70,6 +75,7 @@ export default function BuildFetch() {
                 <button onClick={buildChannelArray}>Submit</button>
             </div>
             <div>
+                <button onClick={saveToSongbook}>Post to Database</button>
                 <button onClick={saveToFile}>Prepare Download</button>
                 <a id="link" target="_blank" download="file.txt">Download</a>
                 <p>{resultsMessage}</p>

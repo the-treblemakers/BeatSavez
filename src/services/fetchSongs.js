@@ -4,3 +4,11 @@ export const fetchSongs = async (youTubeKey, channelId, fetchAmount, orderBy, pa
     return json;
 };
 
+export const postSongs = async (songsArray, databaseEndpoint) => {
+    const res = await fetch(`${databaseEndpoint}`, {
+        method: 'POST',
+        body: songsArray
+    });
+    console.log(res);
+    return res;
+};
