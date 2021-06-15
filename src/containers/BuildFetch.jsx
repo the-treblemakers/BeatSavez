@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchSongs, postSongs, getSongs } from '../services/fetchSongs';
+import styles from '../components/app/app.css';
 
 export default function BuildFetch() {
     const [orderBy, setOrderBy] = useState('viewCount');
@@ -91,33 +92,47 @@ export default function BuildFetch() {
 
     return (
         <>
-            <div>
-                <button onClick={getSongbook}>BeatSavez</button>
-                <select id="endpoint-select" value={endpoint} onChange={({ target }) => setEndpoint(target.value)}>
-                    <option value="http://localhost:7890/api/v1/songs/">Local Single</option>
-                    <option value="http://localhost:7890/api/v1/songs/all">Local Batch</option>
-                    <option value="https://beatwavez-dev.herokuapp.com/api/v1/songs/">Heroku Single</option>
-                    <option value="https://beatwavez-dev.herokuapp.com/api/v1/songs/all">Heroku Batch</option>
-                </select>
-                <input type="text" name="channel-id" value={channelId}
-                    placeholder="Enter Channel ID" onChange={({ target }) => setChannelId(target.value)} required />
-                <select id="order-select" value={orderBy} onChange={({ target }) => setOrderBy(target.value)}>
-                    <option value="viewCount">viewCount</option>
-                    <option value="rating">rating</option>
-                    <option value="date">date</option>
-                </select>
-                <input type="number" id="quantity" name="quantity" min="1" max="500" value={amount} onChange={({ target }) => setAmount(target.value)} required />
-                <input type="text" name="you-tube-key" value={youTubeKey}
-                    placeholder="Enter YouTube Key" onChange={({ target }) => setYouTubeKey(target.value)} />
+            <div className={styles.controls}>
+                
+                <div className={styles.channel}>
+                    <button onClick={getSongbook}>BeatSavez</button>
+                    <select id="endpoint-select" value={endpoint} onChange={({ target }) => setEndpoint(target.value)}>
+                        <option value="http://localhost:7890/api/v1/songs/">Local Single</option>
+                        <option value="http://localhost:7890/api/v1/songs/all">Local Batch</option>
+                        <option value="https://beatwavez-dev.herokuapp.com/api/v1/songs/">Heroku Single</option>
+                        <option value="https://beatwavez-dev.herokuapp.com/api/v1/songs/all">Heroku Batch</option>
+                    </select>
+                    <input type="text" name="channel-id" value={channelId}
+                        placeholder="Enter Channel ID" onChange={({ target }) => setChannelId(target.value)} required />
+                </div>
+
+                <div className={styles.key}>
+                    <select id="order-select" value={orderBy} onChange={({ target }) => setOrderBy(target.value)}>
+                        <option value="viewCount">viewCount</option>
+                        <option value="rating">rating</option>
+                        <option value="date">date</option>
+                    </select>
+                    <input type="number" id="quantity" name="quantity" min="1" max="500" value={amount} onChange={({ target }) => setAmount(target.value)} required />
+                    <input type="text" name="you-tube-key" value={youTubeKey}
+                        placeholder="Enter YouTube Key" onChange={({ target }) => setYouTubeKey(target.value)} />
+                </div>
+
                 <button onClick={buildChannelArray}>Submit</button>
             </div>
-            <div>
-                <button onClick={apiToSongbook}>Post to Database</button>
-                <button onClick={saveToFile}>Prepare Download</button>
-                <a id="link" target="_blank" download="file.txt">Download</a>
-                <p>{resultsMessage}</p>
-                <textarea value={textareaInput} onChange={({ target }) => setTextareaInput(target.value)} placeholder="Paste File for Upload"></textarea>
-                <p>{`${(textareaInput === '') ? 0 : textareaInput.split('},{').length} items`}</p>
+
+            <div className={styles.file}>
+                <div className={styles.data}>
+                    <button onClick={apiToSongbook}>Post to Database</button>
+                    <button onClick={saveToFile}>Prepare Download</button>
+                </div>
+                
+                <div className={styles.results}>
+                    <a id="link" target="_blank" download="file.txt">Download</a>
+                    <p>{resultsMessage}</p>
+                    <textarea value={textareaInput} onChange={({ target }) => setTextareaInput(target.value)} placeholder="Paste File for Upload"></textarea>
+                    <p>{`${(textareaInput === '') ? 0 : textareaInput.split('},{').length} items`}</p>
+                </div>
+
                 <button onClick={textareaToSongbook}>Post File to Database</button>
             </div>
         </>
