@@ -12,22 +12,39 @@
     "browser": true,
     "jest": true
   },
-  "plugins": ["babel", "react"],
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "plugins": [
+    "babel",
+    "react"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
   "rules": {
     "no-console": "warn",
     "indent": [
       "error",
-      2,
+      4,
       {
         "SwitchCase": 1
       }
     ],
-    "quotes": ["error", "single"],
-    "semi": ["error", "always"],
-    "space-in-parens": ["error"],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "space-in-parens": [
+      "error"
+    ],
     "space-infix-ops": "error",
-    "object-curly-spacing": ["error", "always"],
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
     "comma-spacing": "error",
     "space-before-function-paren": [
       "error",
@@ -37,7 +54,10 @@
         "named": "never"
       }
     ],
-    "eol-last": ["error", "always"],
+    "eol-last": [
+      "error",
+      "always"
+    ],
     "keyword-spacing": [
       "error",
       {
@@ -65,14 +85,23 @@
         }
       }
     ],
-    "arrow-spacing": ["error", { "before": true, "after": true }],
+    "arrow-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
     "array-bracket-spacing": "error",
     "prefer-const": "error",
     "no-var": "error",
     "rest-spread-spacing": "error",
     "prefer-arrow-callback": "error",
-    "object-shorthand": ["error", "always"],
-    "max-len": "error",
+    "object-shorthand": [
+      "error",
+      "always"
+    ],
+    "max-len": "off",
     "jsx-quotes": "error",
     "babel/no-invalid-this": 1,
     "babel/semi": 0
