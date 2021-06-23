@@ -1,22 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { fetchSongs, postSongs, getSongs } from '../services/fetchSongs';
-import styles from '../components/app/app.css';
+import React, { useState, useEffect } from "react";
+import { fetchSongs, postSongs, getSongs } from "../services/fetchSongs";
+import styles from "../components/app/app.css";
 
 export default function BuildFetch() {
-    const [orderBy, setOrderBy] = useState('viewCount');
-    const [amount, setAmount] = useState('50');
-    const [channelId, setChannelId] = useState('UCrk8mp-ugqtAbjif6JARjlw');
-    const [youTubeKey, setYouTubeKey] = useState('');
+    const [orderBy, setOrderBy] = useState("viewCount");
+    const [amount, setAmount] = useState("50");
+    const [channelId, setChannelId] = useState("UCrk8mp-ugqtAbjif6JARjlw");
+    const [youTubeKey, setYouTubeKey] = useState("");
     const [channelArray, setChannelArray] = useState([]);
-    const [resultsMessage, setResultsMessage] = useState('');
+    const [resultsMessage, setResultsMessage] = useState("");
     const [endpoint, setEndpoint] = useState(
-        'http://localhost:7890/api/v1/songs/'
+        "http://localhost:7890/api/v1/songs/"
     );
-    const [textareaInput, setTextareaInput] = useState('');
+    const [textareaInput, setTextareaInput] = useState("");
     // const [beforeDate, setBeforeDate] = useState('');
 
     useEffect(() => {
-        console.log('CHANNEL ARRAY', JSON.stringify(channelArray), 'CHANNEL ARRAY');
+        console.log(
+            "CHANNEL ARRAY",
+            JSON.stringify(channelArray),
+            "CHANNEL ARRAY"
+        );
     }, [channelArray, channelId, resultsMessage]);
 
     const apiToSongbook = async () => {
@@ -33,11 +37,11 @@ export default function BuildFetch() {
         setResultsMessage(
             `Posted ${databaseReturn.length} videos for Channel ID: ${channelId} to database.`
         );
-        setChannelId('');
+        setChannelId("");
     };
 
     const getSongbook = async () => {
-        setChannelId('BeatWavez SONGBOOK');
+        setChannelId("BeatWavez SONGBOOK");
         const songbook = await getSongs(endpoint);
         setChannelArray(songbook);
         saveToFile();
@@ -50,26 +54,26 @@ export default function BuildFetch() {
 
         let file;
         const data = JSON.stringify(channelArray);
-        const properties = { type: 'text/plain' };
+        const properties = { type: "text/plain" };
         try {
-            file = new File([data], 'file.txt', properties);
-        } catch(e) {
+            file = new File([data], "file.txt", properties);
+        } catch (e) {
             file = new Blob([data], properties);
         }
         const url = URL.createObjectURL(file);
-        document.getElementById('link').href = url;
+        document.getElementById("link").href = url;
 
         setTextareaInput(data);
     };
 
     const buildChannelArray = async () => {
-        setResultsMessage('');
-        if(channelId !== '') {
-            let pageToken = '';
+        setResultsMessage("");
+        if (channelId !== "") {
+            let pageToken = "";
             let mungedSongs = [];
 
             // YouTube API call built by user inputs
-            for(let i = amount; i > 0; i = i - 50) {
+            for (let i = amount; i > 0; i = i - 50) {
                 const fetchAmount = i > 50 ? 50 : i;
 
                 const { items: results, nextPageToken } = await fetchSongs(
@@ -81,28 +85,12 @@ export default function BuildFetch() {
                 );
 
                 const songs = results.map((song) => {
-                    // If song has &#39; in title string, run cleanup in a loop until it doesn't anymore
-                    const titleCleanup = () => {
-                        const regex = '&#39;';
-                        const string = song.snippet.title;
-                        const substitution = '\'';
-                      
-                        // if(string.includes(regex)) {
-                        while(string.includes(regex)) {
-                            string.replace(regex, substitution);
-                            console.log('while loop');
-                        }
-                        //     return; 
-                        // } return string;
-
-                    };
-                    
-                    const cleanTitle = titleCleanup();
+                    // If song has &#39; in title string, pull the title string apart and smash back together with an apostrophe
+                    const titleString = song.snippet.title;
 
                     return {
                         vidId: song.id.videoId,
-                        // title: song.snippet.title,
-                        title: cleanTitle,
+                        title: titleString.split("&#39;").join("'"),
                         thumbnail: song.snippet.thumbnails.default.url,
                         channelName: song.snippet.channelTitle,
                         channelId,
@@ -116,7 +104,7 @@ export default function BuildFetch() {
 
             setChannelArray(mungedSongs);
         } else {
-            setResultsMessage('ENTER CHANNEL ID BEFORE SUBMITTING');
+            setResultsMessage("ENTER CHANNEL ID BEFORE SUBMITTING");
         }
     };
 
@@ -131,16 +119,16 @@ export default function BuildFetch() {
                         onChange={({ target }) => setEndpoint(target.value)}
                     >
                         <option value="http://localhost:7890/api/v1/songs/">
-              Local Single
+                            Local Single
                         </option>
                         <option value="http://localhost:7890/api/v1/songs/all">
-              Local Batch
+                            Local Batch
                         </option>
                         <option value="https://beatwavez-dev.herokuapp.com/api/v1/songs/">
-              Heroku Single
+                            Heroku Single
                         </option>
                         <option value="https://beatwavez-dev.herokuapp.com/api/v1/songs/all">
-              Heroku Batch
+                            Heroku Batch
                         </option>
                     </select>
                     <input
@@ -193,20 +181,26 @@ export default function BuildFetch() {
 
                 <div className={styles.results}>
                     <a id="link" target="_blank" download="file.txt">
-            Download
+                        Download
                     </a>
                     <p>{resultsMessage}</p>
                     <textarea
                         value={textareaInput}
-                        onChange={({ target }) => setTextareaInput(target.value)}
+                        onChange={({ target }) =>
+                            setTextareaInput(target.value)
+                        }
                         placeholder="Paste File for Upload"
                     ></textarea>
                     <p>{`${
-                        textareaInput === '' ? 0 : textareaInput.split('},{').length
+                        textareaInput === ""
+                            ? 0
+                            : textareaInput.split("},{").length
                     } items`}</p>
                 </div>
 
-                <button onClick={textareaToSongbook}>Post File to Database</button>
+                <button onClick={textareaToSongbook}>
+                    Post File to Database
+                </button>
             </div>
         </>
     );
