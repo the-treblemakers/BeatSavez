@@ -15,19 +15,19 @@ export const fetchSongs = async (
 };
 
 export const postSongs = async (songsArray, endpoint) => {
-    console.log(endpoint, songsArray, 'ENDPOINT');
+    console.log(endpoint, songsArray, "ENDPOINT");
     const res = await fetch(`${endpoint}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
-            Accept: '*/*',
-            'Access-Control-Allow-Origin': '*',
+            "Content-Type": "application/json",
+            Accept: "*/*",
+            "Access-Control-Allow-Origin": "*",
         },
         body: `${songsArray}`,
-        mode: 'cors',
+        mode: "cors",
     });
     const json = await res.json();
-    console.log(res, json, 'RESPONSE');
+    console.log(res, json, "RESPONSE");
     return json;
 };
 
